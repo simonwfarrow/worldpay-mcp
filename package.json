@@ -1,0 +1,39 @@
+{
+  "name": "worldpay-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for building Payment Page using Worldpay Checkout",
+  "main": "server-sse.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server-sse.js",
+    "dev": "tsc && node dist/server-sse.js",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.0.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.5",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.7.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
+  }
+}
