@@ -13,6 +13,16 @@ The stdio version has been tested using Claude Desktop.
 
 The sse version has been tested using Cursor.
 
+
+# Tools
+
+## Make Payment
+![Make Payment](makePayment.png)
+
+## Query Payments
+![Query Payments](queryPayments.png)
+
+
 # Installation
 
 ```bash
