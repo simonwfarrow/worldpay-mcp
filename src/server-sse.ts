@@ -2,6 +2,10 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import express from 'express';
 
 import { server } from "./tools.js";
+import { setupResources } from "./resources.js";
+
+
+setupResources(server);
 
 const app = express();
 let transport: SSEServerTransport;
@@ -18,4 +22,6 @@ app.post("/messages", async (req, res) => {
   await transport.handlePostMessage(req, res);
 });
 
-app.listen(3001);
+app.listen(3001, () => {
+    console.log("SSE server listening on port 3001");
+});
