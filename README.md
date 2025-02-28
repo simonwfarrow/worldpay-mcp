@@ -22,6 +22,20 @@ The sse version has been tested using Cursor.
 ## Query Payments
 ![Query Payments](queryPayments.png)
 
+## Generate Checkout Form
+The `generateCheckoutForm` tool creates customized checkout form code for integrating Worldpay payment processing into your application. It supports both web and React frameworks.
+
+### Parameters:
+- `checkoutId`: Your Worldpay checkout ID
+- `framework`: The framework you're using (`web` or `react`)
+
+### Response:
+The tool returns multiple content items:
+- HTML/React component code
+- CSS styling
+- JavaScript initialization code (for web framework)
+
+This provides everything needed to quickly implement a Worldpay checkout form in your application.
 
 # Installation
 
