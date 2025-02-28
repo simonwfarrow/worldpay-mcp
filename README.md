@@ -54,6 +54,26 @@ The tool returns:
 
 Currently supports card payments with session tokens in Node.js.
 
+## Generate Payment Query
+The `generatePaymentQuery` tool provides documentation and examples for querying the Worldpay Payment Queries API. It helps you understand how to filter and retrieve payment data using various parameters.
+
+### Parameters:
+- `startDate`: Start date for the query range (ISO 8601 format)
+- `endDate`: End date for the query range (ISO 8601 format)
+- `pageSize`: Maximum number of results to return (optional, default: 20)
+- `currency`: Filter by currency code (optional)
+- `minAmount`: Minimum payment amount (optional)
+- `maxAmount`: Maximum payment amount (optional)
+- `last4Digits`: Last 4 digits of card number (optional)
+- `entityReferences`: Merchant entity references (optional)
+- `receivedEvents`: Payment event types (optional)
+
+### Response:
+The tool returns:
+- Comprehensive documentation on query parameters
+- Example API requests with different parameter combinations
+- Sample API response for reference
+
 # Installation
 
 ```bash

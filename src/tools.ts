@@ -74,6 +74,20 @@ type WorldpayResponse = {
     language: z.enum(["node", "java"]),
   }
 
+  const paymentQuerySchema = {
+    startDate: z.string(),
+    endDate: z.string(),
+    pageSize: z.number().optional().default(20),
+    currency: z.string().optional(),
+    minAmount: z.number().optional(),
+    maxAmount: z.number().optional(),
+    last4Digits: z.string().optional().refine(val => val?.length === 4 && /^\d{4}$/.test(val), {
+      message: "last4Digits must be exactly 4 digits"
+    }),
+    entityReferences: z.string().optional(),
+    receivedEvents: z.string().optional()
+  }
+
   // Add payment tool
   server.tool("makePayment",
     paymentSchema,
@@ -251,6 +265,61 @@ type WorldpayResponse = {
             isError: true,
             type: "text", 
             text: `Server code generation failed: ${(error as Error).message}`
+          }]
+        };
+      }
+    }
+  );
+
+  server.tool("generatePaymentQuery",
+    paymentQuerySchema,
+    async (params) => {
+      try {
+
+        const docs = await fs.readFile(path.join(__dirname, 'templates/payment_query_docs.md'), 'utf8');
+        const response = await fs.readFile(path.join(__dirname, 'templates/payment_query_response.json'), 'utf8');
+
+        return {
+          content: [{
+            type: "text",
+            text: "The following is a guide on how to query the Payment Queries API by date range:",
+            mimeType: "text/plain"
+          },
+          {
+            type: "text",
+            text: docs,
+            mimeType: "text/markdown"
+          },
+          {
+            type: "text",
+            text: "Here are some example of the api calls you can make with different parameters:\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}&currency={currency}\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}&minAmount={minAmount}&maxAmount={maxAmount}\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}&last4Digits={last4Digits}\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}&entityReferences={entityReferences}\n \
+            https://try.access.worldpay.com/paymentQueries/payments?startDate={startDate}&endDate={endDate}&pageSize={pageSize}&receivedEvents={receivedEvents}\n \
+            ",
+            mimeType: "text/markdown"
+          },
+          {
+            type: "text",
+            text: "The following is an example of the response from the Worldpay Payment Queries API, use this to model any response handling in the server:",
+            mimeType: "text/json"
+          },
+          {
+            type: "text",
+            text: response,
+            mimeType: "text/json"
+          }
+        ]
+        };
+      } catch (error) {
+        return {
+          content: [{
+            isError: true,
+            type: "text", 
+            text: `Payment query generation failed: ${(error as Error).message}`
           }]
         };
       }
