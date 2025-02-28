@@ -37,6 +37,8 @@ The tool returns multiple content items:
 
 This provides everything needed to quickly implement a Worldpay checkout form in your application.
 
+![Generate Checkout Form](generateCheckoutForm.png)
+
 # Installation
 
 ```bash
