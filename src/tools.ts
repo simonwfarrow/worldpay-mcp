@@ -68,6 +68,12 @@ type WorldpayResponse = {
     framework: z.enum(["web", "react"]),
   }
 
+  const paymentGenerateSchema = {
+    method: z.enum(["card", "paypal"]),
+    instrument: z.enum(["plain", "session"]),
+    language: z.enum(["node", "java"]),
+  }
+
   // Add payment tool
   server.tool("makePayment",
     paymentSchema,
@@ -201,7 +207,55 @@ type WorldpayResponse = {
     }
   );
 
-  //ts-ignore
+  server.tool("generatePaymentServerCode",
+    paymentGenerateSchema,
+    async (params) => {
+      try {
+
+          const response = await fs.readFile(path.join(__dirname, 'templates/payment_api_response.json'), 'utf8');
+    
+          let component;
+          if (params.method === "card" && params.instrument === "session" && params.language === "node") {
+            component = await fs.readFile(path.join(__dirname, 'templates/cp_session_payment_node.js'), 'utf8');
+          } else {
+            throw new Error("Unsupported combination of parameters");
+          }
+          
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Add this to the server to allow it to make payments using the Worldpay API:",
+              mimeType: "text/plain"
+            },
+            {
+              type: "text",
+              text: component,
+              mimeType: "text/javascript"
+            },
+            {
+              type: "text",
+              text: "The following is an example of the response from the Worldpay PaymentsAPI, use this to model any response handling in the server:",
+              mimeType: "text/plain"
+            },
+            {
+              type: "text",
+              text: response,
+              mimeType: "text/json"
+            }
+          ]
+        };
+      } catch (error) {
+        return {
+          content: [{
+            isError: true,
+            type: "text", 
+            text: `Server code generation failed: ${(error as Error).message}`
+          }]
+        };
+      }
+    }
+  );
 
   // Generate checkout form tool
   server.tool("generateCheckoutForm",

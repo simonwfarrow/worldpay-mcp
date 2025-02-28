@@ -39,6 +39,21 @@ This provides everything needed to quickly implement a Worldpay checkout form in
 
 ![Generate Checkout Form](generateCheckoutForm.png)
 
+## Generate Payment Server Code
+The `generatePaymentServerCode` tool provides server-side code for processing payments through the Worldpay API. It generates code based on your specific payment method, instrument type, and programming language.
+
+### Parameters:
+- `method`: Payment method (`card`, `paypal`)
+- `instrument`: Instrument type (`plain`, `session`)
+- `language`: Programming language (`node`, `java`)
+
+### Response:
+The tool returns:
+- Server-side implementation code
+- Example API response for reference
+
+Currently supports card payments with session tokens in Node.js.
+
 # Installation
 
 ```bash
