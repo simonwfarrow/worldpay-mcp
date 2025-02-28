@@ -5,7 +5,7 @@
   "main": "server-sse.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mkdir -p dist/templates && cp templates/* dist/templates/",
     "start": "node dist/server-sse.js",
     "dev": "tsc && node dist/server-sse.js",
     "test": "jest"
