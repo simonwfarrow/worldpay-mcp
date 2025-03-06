@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import path from "path";
 import fs from "fs/promises";
 import { fileURLToPath } from 'url';
+import { features } from "process";
 
 // Define __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -71,6 +72,7 @@ type WorldpayResponse = {
   const paymentGenerateSchema = {
     method: z.enum(["card", "paypal"]),
     instrument: z.enum(["plain", "session"]),
+    features: z.array(z.enum(["3ds", "fraud", "payfac", "recurring", "installments","moto","autoSettlement","checkout","tokens","cards","applePay","googlePay","subscriptions"])),
     language: z.enum(["node", "java"]),
   }
 
@@ -221,16 +223,17 @@ type WorldpayResponse = {
     }
   );
 
+
   server.tool("generatePaymentServerCode",
     paymentGenerateSchema,
     async (params) => {
       try {
 
-          const response = await fs.readFile(path.join(__dirname, 'templates/payment_api_response.json'), 'utf8');
+          const response = await fs.readFile(path.join(__dirname, 'templates/examples/payment_api_response.json'), 'utf8');
     
           let component;
           if (params.method === "card" && params.instrument === "session" && params.language === "node") {
-            component = await fs.readFile(path.join(__dirname, 'templates/cp_session_payment_node.js'), 'utf8');
+            component = await fs.readFile(path.join(__dirname, 'templates/code/cp_session_payment_node.js'), 'utf8');
           } else {
             throw new Error("Unsupported combination of parameters");
           }
@@ -276,8 +279,8 @@ type WorldpayResponse = {
     async (params) => {
       try {
 
-        const docs = await fs.readFile(path.join(__dirname, 'templates/payment_query_docs.md'), 'utf8');
-        const response = await fs.readFile(path.join(__dirname, 'templates/payment_query_response.json'), 'utf8');
+        const docs = await fs.readFile(path.join(__dirname, 'templates/md/payment_query_docs.md'), 'utf8');
+        const response = await fs.readFile(path.join(__dirname, 'templates/examples/payment_query_response.json'), 'utf8');
 
         return {
           content: [{
@@ -332,15 +335,15 @@ type WorldpayResponse = {
     async (params) => {
       try {
         const component = params.framework === "web" 
-          ? await fs.readFile(path.join(__dirname, 'templates/checkout_form.html'), 'utf8')
-          : await fs.readFile(path.join(__dirname, 'templates/react_form.txt'), 'utf8')
+          ? await fs.readFile(path.join(__dirname, 'templates/code/checkout_form.html'), 'utf8')
+          : await fs.readFile(path.join(__dirname, 'templates/code/react_form.txt'), 'utf8')
         
         const styling = params.framework === "web" 
-          ? await fs.readFile(path.join(__dirname, 'templates/web_css.css'), 'utf8') 
-          : await fs.readFile(path.join(__dirname, 'templates/react_css.css'), 'utf8')
+          ? await fs.readFile(path.join(__dirname, 'templates/code/web_css.css'), 'utf8') 
+          : await fs.readFile(path.join(__dirname, 'templates/code/react_css.css'), 'utf8')
 
         const js = params.framework === "web" 
-          ? await fs.readFile(path.join(__dirname, 'templates/web_js.js'), 'utf8') 
+          ? await fs.readFile(path.join(__dirname, 'templates/code/web_js.js'), 'utf8') 
           : ""
         
         return {

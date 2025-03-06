@@ -1,0 +1,8 @@
+type: object
+properties:
+  errorName:
+    type: string
+  message:
+    type: string
+  headerName:
+    type: string

@@ -1,0 +1,6 @@
+type: object
+properties:
+  conflictsExpiryDateTime:
+    type: string
+  paymentInstrument:
+    $ref: ./ConflictPaymentInstrument.yaml

@@ -3,6 +3,8 @@ import express from 'express';
 
 import { server } from "./tools.js";
 import { setupResources } from "./resources.js";
+// Import prompts to ensure they are registered
+import "./prompts.js";
 
 
 setupResources(server);
